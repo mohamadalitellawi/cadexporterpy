@@ -1,8 +1,19 @@
 import math
 from shapely.geometry import Polygon
-
+import json
 
 ROUNDING_3 = 3
+
+def load_dict_from_file(file_path):
+    with open(file_path) as file:
+        output = json.load(file)
+    return output
+
+
+def export_dict_to_file(file_path, output = {}):
+    with open(file_path, 'w') as file:
+        json.dump(output, file, indent = 4)
+
 
 def get_polygon_centroid(polyline2D):
     polygon = Polygon(polyline2D)

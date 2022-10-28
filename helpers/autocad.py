@@ -149,7 +149,7 @@ def select_get_multiple_objects(clean_duplicate= True,rounding_digits = ROUNDING
         
     except:
         print("Unexpected error", sys.exc_info()[0])
-        #raise
+        raise
     finally:
         acad = None
 

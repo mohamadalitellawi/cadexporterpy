@@ -3,12 +3,15 @@ from rich import print_json
 from rich import inspect
 import business as bs
 from business.column import test as column_test
+from business.column import get_revit_columns
+from helpers.common import export_dict_to_file
+
 from business import SETTINGS, TEMP_PATH
 
 class App:
     def __init__(self) -> None:
         self.out_file_name = TEMP_PATH
-        self.out_objects = {}
+        self.out_objects = bs.OUTPUT
 
     def startup(self):        
         # print the greeting at startup
@@ -78,7 +81,7 @@ class App:
 
             elif selection[0] == 'O':
                 try:
-                    print(column_test())
+                    #print(column_test())
                     print_json(data = bs.OUTPUT)
                 except Exception as e:
                     self.menu_error()
@@ -96,11 +99,20 @@ class App:
                     if filename.capitalize()[0] == "X": continue
                     self.out_file_name = filename
                     print(self.out_file_name)
+                    export_dict_to_file(filename, self.out_objects)
                 except Exception as e:
                     self.menu_error()
                     #raise e
                 continue
 
+
+            elif selection[0] == 'A':
+                try:
+                    get_revit_columns()
+                except Exception as e:
+                    self.menu_error()
+                    #raise e
+                continue
 
             # elif selection[0] == 'S':
             #     try:
@@ -114,13 +126,7 @@ class App:
             #         #raise e
             #     continue
 
-            # elif selection[0] == 'A':
-            #     try:
-            #         buisness.link_Bar_Info()
-            #     except Exception as e:
-            #         self.menu_error()
-            #         #raise e
-            #     continue
+
 
 
             # elif selection[0] == 'B':

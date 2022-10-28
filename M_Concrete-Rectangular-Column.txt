@@ -1,0 +1,5 @@
+,b##LENGTH##MILLIMETERS,h##LENGTH##MILLIMETERS,Structural Material##OTHER##
+R11000*5000,5000,11000,"Concrete, Cast-in-Place gray"
+R1000*500,500,1000,"Concrete, Cast-in-Place gray"
+R10270*4480,4480,10270,"Concrete, Cast-in-Place gray"
+R2500*1000,1000,2500,"Concrete, Cast-in-Place gray"
