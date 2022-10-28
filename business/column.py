@@ -1,5 +1,5 @@
 
-from business import SETTINGS, TEMP_PATH
+from business import SETTINGS, TEMP_PATH, FAMILY_REC_TYPES_PATH, FAMILY_CIR_TYPES_PATH
 from helpers.common import get_equivelant_rectangle, get_polygon_area,get_polygon_centroid
 import helpers.autocad as cad
 
@@ -7,7 +7,7 @@ import helpers.autocad as cad
 def test():
     return cad.select_get_multiple_objects()
 
-def export_rec_columns_family_types(columns, file_path = TEMP_PATH):
+def export_rec_columns_family_types(columns, file_path = FAMILY_REC_TYPES_PATH):
     header = ',b##LENGTH##MILLIMETERS,h##LENGTH##MILLIMETERS,Structural Material##OTHER##\n'
     shapes = []
     for column in columns:
@@ -43,7 +43,7 @@ def get_rectangular_columns(selected_polylines_coordinates):
 
 
 
-def export_cir_columns_family_types(columns, file_path = TEMP_PATH):
+def export_cir_columns_family_types(columns, file_path = FAMILY_CIR_TYPES_PATH):
     header = ',b##LENGTH##MILLIMETERS,Structural Material##OTHER##\n'
     shapes = []
     for column in columns:

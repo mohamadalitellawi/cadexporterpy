@@ -104,7 +104,7 @@ def select_get_multiple_objects(clean_duplicate= True,rounding_digits = ROUNDING
 
         Returns:
                 multiple objects dictionary (dict of list of tuples of tuples): [(start_coordinate3d, end_coordinate3d)]
-                results = {"lines":lines_coordinates, "polylines":polylines_coordinates,"circles":circles_coordinates}
+                results = {"lines":lines_coordinates, "polylines":polylines_coordinates, "circles":circles_coordinates, "arcs":arcs_coordinates}
     '''
 
 
@@ -113,11 +113,12 @@ def select_get_multiple_objects(clean_duplicate= True,rounding_digits = ROUNDING
         acad.prompt("Hello, Autocad from Python\n")
         print (acad.doc.Name)
         
-        sset = acad.get_selection("Selece Polyline-line-circle:\n")
+        sset = acad.get_selection("Selece multiple cad objects [polylines - lines - circles - ...]:\n")
         
         polylines_coordinates = []
         lines_coordinates = []
         circles_coordinates = []
+        arcs_coordinates = []
         for indx,obj in enumerate(sset):
             if ("polyline" in str(acad.best_interface(obj)).lower()):
                 polyline = _get_polyline_coordinates2d(obj,clean_duplicate,rounding_digits)
@@ -137,12 +138,18 @@ def select_get_multiple_objects(clean_duplicate= True,rounding_digits = ROUNDING
                     if circle in circles_coordinates:
                         continue
                 circles_coordinates.append(circle)
-        results = {"lines":lines_coordinates, "polylines":polylines_coordinates,"circles":circles_coordinates}
+            elif ("acadarc" in str(acad.best_interface(obj)).lower()):
+                arc = _get_arc_diameter_coordinates(obj, rounding_digits)
+                if clean_duplicate:
+                    if arc in arcs_coordinates:
+                        continue
+                arcs_coordinates.append(arc)
+        results = {"lines":lines_coordinates, "polylines":polylines_coordinates,"circles":circles_coordinates, "arcs":arcs_coordinates}
         return results
         
     except:
         print("Unexpected error", sys.exc_info()[0])
-        raise
+        #raise
     finally:
         acad = None
 
@@ -244,6 +251,18 @@ def select_lines_get_coordinates3d(clean_duplicate:'bool' = True,rounding_digits
         raise
     finally:
         acad = None
+
+
+def _get_arc_diameter_coordinates(cadObj, rounding_digits:'int' = ROUNDING):
+    center_point = list(cadObj.Center)
+    start_point = list(cadObj.StartPoint)
+    end_point = list(cadObj.EndPoint)
+    center_point = tuple(round(x,rounding_digits) for x in center_point)
+    start_point = tuple(round(x,rounding_digits) for x in start_point)
+    end_point = tuple(round(x,rounding_digits) for x in end_point)
+    radius = float(cadObj.Radius)
+    arc = (round(2*radius , rounding_digits), (center_point,start_point,end_point))
+    return arc
 
 
 def _get_circle_diameter_coordinates(cadObj, rounding_digits:'int' = ROUNDING):

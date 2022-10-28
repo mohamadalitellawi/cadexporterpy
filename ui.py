@@ -3,11 +3,12 @@ from rich import print_json
 from rich import inspect
 import business as bs
 from business.column import test as column_test
-
+from business import SETTINGS, TEMP_PATH
 
 class App:
     def __init__(self) -> None:
-        pass
+        self.out_file_name = TEMP_PATH
+        self.out_objects = {}
 
     def startup(self):        
         # print the greeting at startup
@@ -27,11 +28,10 @@ class App:
         print("(R): Repeat this menu")
 
 
-        print("(A): select and get rectangular columns (from polylines)")
-        print("(B): select and get circular columns (from circules)")
-        print("(C): select and get open walls (from polylines)")
-        print("(D): select and get closed walls (from polylines)")
-        print("(E): select and get floors (from polylines)")
+        print("(A): select and get columns (from polylines, circles)")
+        print("(B): select and get open walls (from polylines, lines, arcs)")
+        print("(C): select and get closed walls (from polylines)")
+        print("(D): select and get floors (from polylines)")
 
         print("(O): check current objects")
         print("(P): Print objects to json file")
@@ -86,20 +86,20 @@ class App:
                 continue
 
 
-            # elif selection[0] == 'E':
-            #     try:
-            #         imagefilename = input("Enter Image File Name with path: ")
-            #         if len(imagefilename) == 0: continue
-            #         if imagefilename.capitalize()[0] == "X": continue
-
-            #         active_doc = helpercad.get_cad_active_doc()
-            #         if active_doc is not None:
-            #             helpercad.export_image(active_doc,imagefilename)
-                    
-            #     except Exception as e:
-            #         self.menu_error()
-            #         #raise e
-            #     continue
+            elif selection[0] == 'P':
+                try:
+                    print(f'current output file path is {self.out_file_name}')
+                    filename = input("Enter File Name with full path <press dot(.) to use current>: ")
+                    if len(filename) == 0: continue
+                    if filename[0] == ".":
+                        filename = self.out_file_name
+                    if filename.capitalize()[0] == "X": continue
+                    self.out_file_name = filename
+                    print(self.out_file_name)
+                except Exception as e:
+                    self.menu_error()
+                    #raise e
+                continue
 
 
             # elif selection[0] == 'S':
