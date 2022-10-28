@@ -93,6 +93,75 @@ def test1():
     finally:
         acad = None
 
+
+def select_get_multiple_objects(clean_duplicate= True,rounding_digits = ROUNDING): 
+    '''
+    Returns the list of selected objects in autocad (lines, polylines, circles).
+
+        Parameters:
+                clean_duplicate (bool): True for removing duplicated (points and polylines)
+                rounding_digits (int): use to round the coordinates
+
+        Returns:
+                multiple objects dictionary (dict of list of tuples of tuples): [(start_coordinate3d, end_coordinate3d)]
+                results = {"lines":lines_coordinates, "polylines":polylines_coordinates,"circles":circles_coordinates}
+    '''
+
+
+    try:
+        acad = get_autocad(create_if_not_exists=True)
+        acad.prompt("Hello, Autocad from Python\n")
+        print (acad.doc.Name)
+        
+        sset = acad.get_selection("Selece Polyline-line-circle:\n")
+        
+        polylines_coordinates = []
+        lines_coordinates = []
+        circles_coordinates = []
+        for indx,obj in enumerate(sset):
+            if ("polyline" in str(acad.best_interface(obj)).lower()):
+                polyline = _get_polyline_coordinates2d(obj,clean_duplicate,rounding_digits)
+                if clean_duplicate:
+                    if polyline in polylines_coordinates:
+                        continue
+                polylines_coordinates.append(polyline)
+            elif ("acadline" in str(acad.best_interface(obj)).lower()):
+                line = _get_line_coordinates(obj,rounding_digits)
+                if clean_duplicate:
+                    if line in lines_coordinates:
+                        continue
+                lines_coordinates.append(line)
+            elif ("acadcircle" in str(acad.best_interface(obj)).lower()):
+                circle = _get_circle_diameter_coordinates(obj, rounding_digits)
+                if clean_duplicate:
+                    if circle in circles_coordinates:
+                        continue
+                circles_coordinates.append(circle)
+        results = {"lines":lines_coordinates, "polylines":polylines_coordinates,"circles":circles_coordinates}
+        return results
+        
+    except:
+        print("Unexpected error", sys.exc_info()[0])
+        raise
+    finally:
+        acad = None
+
+
+
+def _get_polyline_coordinates2d(cadObj, clean_duplicate:'bool' = True, rounding_digits:'int' = ROUNDING):
+    polyline = []
+    #print (type(obj.Coordinates))
+    coordinates = cadObj.Coordinates
+    for i in range(0,len(coordinates),2):
+        point = (round(coordinates[i],rounding_digits),round(coordinates[i+1],rounding_digits))
+        if clean_duplicate:
+            if point in polyline:
+                continue
+        polyline.append(point)
+
+    polyline = tuple(polyline)
+    return polyline
+
 def select_polylines_get_coordinates2d(clean_duplicate:'bool' = True,rounding_digits:'int' = ROUNDING)-> 'list[list[tuple(float,float,float)]]' : 
     '''
     Returns the list of selected polylines in autocad.
@@ -102,7 +171,7 @@ def select_polylines_get_coordinates2d(clean_duplicate:'bool' = True,rounding_di
                 rounding_digits (int): use to round the coordinates
 
         Returns:
-                polylines (list of tuples): [(start_coordinate3d, end_coordinate3d)]
+                polylines (list of tuples of tuples): [((coordinates 2d))]
     '''
 
 
@@ -117,17 +186,7 @@ def select_polylines_get_coordinates2d(clean_duplicate:'bool' = True,rounding_di
         polylines_coordinates = []
         for indx,obj in enumerate(sset):
             if ("polyline" in str(acad.best_interface(obj)).lower()):
-                polyline = []
-                #print (type(obj.Coordinates))
-                coordinates = obj.Coordinates
-                for i in range(0,len(coordinates),2):
-                    point = (round(coordinates[i],rounding_digits),round(coordinates[i+1],rounding_digits))
-                    if clean_duplicate:
-                        if point in polyline:
-                            continue
-                    polyline.append(point)
-
-                polyline = tuple(polyline)
+                polyline = _get_polyline_coordinates2d(obj,clean_duplicate,rounding_digits)
                 if clean_duplicate:
                     if polyline in polylines_coordinates:
                         continue
@@ -140,6 +199,14 @@ def select_polylines_get_coordinates2d(clean_duplicate:'bool' = True,rounding_di
     finally:
         acad = None
 
+
+def _get_line_coordinates(cadObj, rounding_digits:'int' = ROUNDING):
+    start_point = list(cadObj.StartPoint)
+    end_point = list(cadObj.EndPoint)
+    start_point = tuple(round(x,rounding_digits) for x in start_point)
+    end_point = tuple(round(x,rounding_digits) for x in end_point)
+    line = (start_point, end_point)
+    return line
 
 def select_lines_get_coordinates3d(clean_duplicate:'bool' = True,rounding_digits:'int' = ROUNDING)-> 'list[tuple(tuple(float,float,float))]' : 
     '''
@@ -165,12 +232,7 @@ def select_lines_get_coordinates3d(clean_duplicate:'bool' = True,rounding_digits
         lines_coordinates = []
         for indx,obj in enumerate(sset):
             if ("acadline" in str(acad.best_interface(obj)).lower()):
-                print(obj.Handle)
-                start_point = list(obj.StartPoint)
-                end_point = list(obj.EndPoint)
-                start_point = tuple(round(x,rounding_digits) for x in start_point)
-                end_point = tuple(round(x,rounding_digits) for x in end_point)
-                line = (start_point, end_point)
+                line = _get_line_coordinates(obj,rounding_digits)
                 if clean_duplicate:
                     if line in lines_coordinates:
                         continue
@@ -184,6 +246,12 @@ def select_lines_get_coordinates3d(clean_duplicate:'bool' = True,rounding_digits
         acad = None
 
 
+def _get_circle_diameter_coordinates(cadObj, rounding_digits:'int' = ROUNDING):
+    center_point = list(cadObj.Center)
+    center_point = tuple(round(x,rounding_digits) for x in center_point)
+    radius = float(cadObj.Radius)
+    circle = (round(2*radius , rounding_digits), center_point)
+    return circle
 
 def select_circles_get_coordinates3d(clean_duplicate:'bool' = True,rounding_digits:'int' = ROUNDING) : 
     '''
@@ -209,10 +277,7 @@ def select_circles_get_coordinates3d(clean_duplicate:'bool' = True,rounding_digi
         circles_coordinates = []
         for indx,obj in enumerate(sset):
             if ("acadcircle" in str(acad.best_interface(obj)).lower()):
-                center_point = list(obj.Center)
-                center_point = tuple(round(x,rounding_digits) for x in center_point)
-                radius = float(obj.Radius)
-                circle = (round(2*radius , rounding_digits), center_point)
+                circle = _get_circle_diameter_coordinates(obj, rounding_digits)
                 if clean_duplicate:
                     if circle in circles_coordinates:
                         continue

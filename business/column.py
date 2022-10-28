@@ -5,7 +5,7 @@ import helpers.autocad as cad
 
 
 def test():
-    return cad.select_polylines_get_coordinates2d()
+    return cad.select_get_multiple_objects()
 
 def export_rec_columns_family_types(columns, file_path = TEMP_PATH):
     header = ',b##LENGTH##MILLIMETERS,h##LENGTH##MILLIMETERS,Structural Material##OTHER##\n'
