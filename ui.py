@@ -4,6 +4,7 @@ from rich import inspect
 import business as bs
 from business.column import test as column_test
 from business.column import get_revit_columns
+from business.wall import get_revit_walls_open
 from helpers.common import export_dict_to_file
 
 from business import SETTINGS, TEMP_PATH
@@ -33,7 +34,7 @@ class App:
 
         print("(A): select and get columns (from polylines, circles)")
         print("(B): select and get open walls (from polylines, lines, arcs)")
-        print("(C): select and get closed walls (from polylines)")
+        print("(C): select and get closed walls (from polylines, circles)")
         print("(D): select and get floors (from polylines)")
 
         print("(O): check current objects")
@@ -113,6 +114,16 @@ class App:
                     self.menu_error()
                     #raise e
                 continue
+
+
+            elif selection[0] == 'B':
+                try:
+                    get_revit_walls_open()
+                except Exception as e:
+                    self.menu_error()
+                    #raise e
+                continue
+
 
             # elif selection[0] == 'S':
             #     try:

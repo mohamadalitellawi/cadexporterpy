@@ -1,5 +1,5 @@
 
-from turtle import circle
+
 from business import OUTPUT, SETTINGS, TEMP_PATH, FAMILY_REC_TYPES_PATH, FAMILY_CIR_TYPES_PATH
 from helpers.common import get_equivelant_rectangle, get_polygon_area,get_polygon_centroid
 import helpers.autocad as cad

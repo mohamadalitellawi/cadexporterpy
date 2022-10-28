@@ -13,7 +13,8 @@ SETTINGS = {
     'shift_xdir':0,
     'shift_ydir':0,
     'angle':0,
-    'rounding_digits':-1
+    'rounding_digits':-1,
+    'wall_thk':200
 }
 
 OUTPUT = {'settings':SETTINGS, 'columns':[],'circular_columns':[], 'walls':[]}
