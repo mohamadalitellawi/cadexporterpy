@@ -1,0 +1,14 @@
+altgraph==0.17.3
+commonmark==0.9.1
+comtypes==1.1.14
+future==0.18.2
+pefile==2022.5.30
+pyautocad==0.2.0
+Pygments==2.13.0
+pyinstaller==5.6.1
+pyinstaller-hooks-contrib==2022.11
+pywin32==304
+pywin32-ctypes==0.2.0
+rich==12.6.0
+Shapely==1.8.5.post1
+typing_extensions==4.4.0
