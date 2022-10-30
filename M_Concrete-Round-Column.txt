@@ -1,2 +1,8 @@
 ,b##LENGTH##MILLIMETERS,Structural Material##OTHER##
+C1500,1500,"Concrete, Cast-in-Place gray"
+C1400,1400,"Concrete, Cast-in-Place gray"
+C1200,1200,"Concrete, Cast-in-Place gray"
+C700,700,"Concrete, Cast-in-Place gray"
+C600,600,"Concrete, Cast-in-Place gray"
+C1000,1000,"Concrete, Cast-in-Place gray"
 C800,800,"Concrete, Cast-in-Place gray"

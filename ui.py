@@ -4,7 +4,8 @@ from rich import inspect
 import business as bs
 from business.column import test as column_test
 from business.column import get_revit_columns
-from business.wall import get_revit_walls_open
+from business.wall import get_revit_walls_by_centerline, get_revit_walls_open
+from business.floor import get_revit_floors_by_edge_polyline
 from helpers.common import export_dict_to_file
 
 from business import SETTINGS, TEMP_PATH
@@ -33,12 +34,15 @@ class App:
 
 
         print("(A): select and get columns (from polylines, circles)")
-        print("(B): select and get open walls (from polylines, lines, arcs)")
-        print("(C): select and get closed walls (from polylines, circles)")
+        print("(B): select and get walls by center line (from polylines, lines, circles, arcs)")
+        print("(C): select and get open walls (from polylines), option to update walls selected in (B)")
         print("(D): select and get floors (from polylines)")
+        print("(E): extract all types in the current objects [columns/walls/floors]")
 
         print("(O): check current objects")
         print("(P): Print objects to json file")
+
+        print("(U): Update Settings <be careful>")
 
         print("(X): eXit program")
 
@@ -118,38 +122,55 @@ class App:
 
             elif selection[0] == 'B':
                 try:
-                    get_revit_walls_open()
+                    get_revit_walls_by_centerline()
                 except Exception as e:
                     self.menu_error()
                     #raise e
                 continue
 
 
-            # elif selection[0] == 'S':
-            #     try:
-            #         scale = input("Enter Shape Block Scale Factor: ")
-            #         if len(scale) == 0: continue
-            #         if scale.capitalize()[0] == "X": continue
-            #         scale = float(scale)
-            #         buisness.SHAPE_SCALE_FACTOR = scale
-            #     except Exception as e:
-            #         self.menu_error()
-            #         #raise e
-            #     continue
+            elif selection[0] == 'C':
+                try:
+                    update_existing = False
+                    if (len (self.out_objects['walls']) > 0):
+                        answer = input('there are existing walls\ndo you want to update [yes/no]: ')
+                        if len(answer) > 0 and answer.capitalize()[0] == "Y":
+                            update_existing=True
+                    get_revit_walls_open(update_existing=update_existing)
+                except Exception as e:
+                    self.menu_error()
+                    #raise e
+                continue
 
 
+            elif selection[0] == 'D':
+                try:
+                    get_revit_floors_by_edge_polyline()
+                except Exception as e:
+                    self.menu_error()
+                    #raise e
+                continue
 
 
-            # elif selection[0] == 'B':
-            #     try:
-            #         buisness.send_selectedbars_to_excel()
-            #     except Exception as e:
-            #         self.menu_error()
-            #         #raise e
-            #     continue
+            elif selection[0] == 'E':
+                try:
+                    print()
+                except Exception as e:
+                    self.menu_error()
+                    #raise e
+                continue
 
 
-
+            elif selection[0] == 'U':
+                try:
+                    answer = input('do you want to reset setting  [yes/no]: ')
+                    if len(answer) > 0 and answer.capitalize()[0] == "Y":
+                        print(bs.reset_default_settings())
+                    print(bs.update_settings_from_console())
+                except Exception as e:
+                    self.menu_error()
+                    #raise e
+                continue
 
 
 if __name__ == "__main__":

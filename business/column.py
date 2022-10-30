@@ -28,7 +28,7 @@ def get_revit_columns(export_types = True):
         if len(rec_columns) > 0:
             OUTPUT['columns'] = rec_columns
         if len(circle_columns) > 0:
-            OUTPUT['circular_columns'] = circle_columns
+            OUTPUT['columns_circle'] = circle_columns
         if export_types:
             export_rec_columns_family_types(rec_columns)
             export_cir_columns_family_types(circle_columns)
