@@ -1,6 +1,6 @@
 
 import helpers.autocad as cad
-from business import OUTPUT, SETTINGS
+from business import OUTPUT, SETTINGS, get_walls_labels
 from helpers.common import get_distance_2d
 from rich import print
 
@@ -26,7 +26,7 @@ def get_revit_walls_open(update_existing = False):
 
         if len(walls) > 0:
             OUTPUT['walls'] = walls
-
+        print(get_walls_labels())
         return True
     except:
         print("Error in revit open walls")
@@ -59,6 +59,7 @@ def get_revit_walls_by_centerline(thickness = SETTINGS['wall_thk']):
             OUTPUT['walls_arc'] = walls_arc
         if len(walls_circle) > 0:
             OUTPUT['walls_circle'] = walls_circle
+        print(get_walls_labels())
         return True
     except:
         print("Error in revit walls")
@@ -87,7 +88,7 @@ def get_revit_walls_by_centerline(thickness = SETTINGS['wall_thk']):
 def get_wall_by_polyline(selected_polylines_coordinates, thickness = SETTINGS['wall_thk'] , rounding=SETTINGS['rounding_digits']):
     walls = []
     thickness = int(thickness)
-    label = f'W{thickness}'
+    label = f'HSC_Wall_{thickness}_RC-40Mpa'
 
     #print( selected_polylines_coordinates)
     for polyline in selected_polylines_coordinates:
@@ -104,7 +105,7 @@ def get_wall_by_polyline(selected_polylines_coordinates, thickness = SETTINGS['w
 def get_wall_by_line(selected_lines_coordinates, thickness = SETTINGS['wall_thk'] , rounding=SETTINGS['rounding_digits']):
     walls = []
     thickness = int(thickness)
-    label = f'W{thickness}'
+    label = f'HSC_Wall_{thickness}_RC-40Mpa'
     
     #print( selected_polylines_coordinates)
     for line in selected_lines_coordinates:
@@ -121,7 +122,7 @@ def get_wall_by_line(selected_lines_coordinates, thickness = SETTINGS['wall_thk'
 def get_wall_by_arc(selected_arcs_coordinates, thickness = SETTINGS['wall_thk'] , rounding=SETTINGS['rounding_digits']):
     walls = []
     thickness = int(thickness)
-    label = f'W{thickness}'
+    label = f'HSC_Wall_{thickness}_RC-40Mpa'
     #(diameter, (center_point,start_point,end_point))
     for arc in selected_arcs_coordinates:
         points_list = []
@@ -138,7 +139,7 @@ def get_wall_by_arc(selected_arcs_coordinates, thickness = SETTINGS['wall_thk'] 
 def get_wall_by_circle(selected_circles_coordinates, thickness = SETTINGS['wall_thk'] , rounding=SETTINGS['rounding_digits']):
     walls = []
     thickness = int(thickness)
-    label = f'W{thickness}'
+    label = f'HSC_Wall_{thickness}_RC-40Mpa'
     #(diameter, (center_point))
     for circle in selected_circles_coordinates:
         diameter = circle[0]
@@ -186,7 +187,7 @@ def get_open_wall_by_polyline(selected_polylines_coordinates, rounding=SETTINGS[
         thickness = min(thicknessess)
         thickness = round(thickness, rounding)
         thickness = int(thickness)
-        label = f'W{thickness}'
+        label = f'HSC_Wall_{thickness}_RC-40Mpa'
         walls.append({'shape':(thickness, label), 'coordinates':mid_points})
     return walls
 

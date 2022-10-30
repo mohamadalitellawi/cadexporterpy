@@ -154,7 +154,7 @@ class App:
 
             elif selection[0] == 'E':
                 try:
-                    print()
+                    print(bs.extract_all_current_types())
                 except Exception as e:
                     self.menu_error()
                     #raise e

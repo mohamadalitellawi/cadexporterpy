@@ -64,9 +64,9 @@ def get_equivelant_rectangle(polyline2D,area,rounding = ROUNDING_3) :
         angle_in_degrees = round(angle_in_degrees,rounding)
 
         width = round(area / length, rounding)
-        label = f'R{int(length)}*{int(width)}'
+        #'HSC_400x300_RC-50Mpa'
+        label = f'HSC_{int(length)}x{int(width)}_RC-50Mpa'
         result = (length, width, angle_in_degrees,label)
-    
     return result
 
 

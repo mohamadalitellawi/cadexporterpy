@@ -1,5 +1,5 @@
 import helpers.autocad as cad
-from business import OUTPUT, SETTINGS
+from business import OUTPUT, SETTINGS, get_floors_labels
 from helpers.common import get_distance_2d
 from rich import print
 
@@ -27,15 +27,23 @@ def get_revit_floors_by_edge_polyline(thickness = SETTINGS['floot_thk']):
         if len(floors_circle) > 0:
             OUTPUT['floors_circle'] = floors_circle
 
+        print(get_floors_labels())
         return True
     except:
         print("Error in revit floors")
         raise
 
+
+
+
+
+
+
+
 def get_floor_by_polyline(selected_polylines_coordinates, thickness = SETTINGS['floot_thk'] , rounding=SETTINGS['rounding_digits']):
     floors = []
     thickness = int(thickness)
-    label = f'T{thickness}'
+    label = f'HSC_Floor_{thickness}_RC-40Mpa'
 
     #print( selected_polylines_coordinates)
     for polyline in selected_polylines_coordinates:
@@ -51,7 +59,7 @@ def get_floor_by_polyline(selected_polylines_coordinates, thickness = SETTINGS['
 def get_floor_by_circle(selected_circles_coordinates, thickness = SETTINGS['floot_thk'] , rounding=SETTINGS['rounding_digits']):
     floors = []
     thickness = int(thickness)
-    label = f'T{thickness}'
+    label = f'HSC_Floor_{thickness}_RC-40Mpa'
     #(diameter, (center_point))
     for circle in selected_circles_coordinates:
         diameter = circle[0]

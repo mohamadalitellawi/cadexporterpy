@@ -1,0 +1,3 @@
+,b##LENGTH##MILLIMETERS,Structural Material##OTHER##
+HSC_1450_RC-50Mpa,1450,"Concrete, Cast-in-Place gray"
+HSC_400_RC-50Mpa,400,"Concrete, Cast-in-Place gray"

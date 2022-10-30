@@ -2,13 +2,19 @@ import helpers.autocad as autocadhelper
 import helpers.common as mhelper
 import json
 
-TEMP_PATH = r'C:\Users\mali\Desktop\mytemp.txt'
+
+TEMP_PATH = r'.\out.json'
 
 COLUMN_FILE_PATH = r'.\column_output.json'
 WALL_FILE_PATH = r'.\wall_output.json'
 FLOOR_FILE_PATH = r'.\floor_output.json'
-FAMILY_REC_TYPES_PATH = r'.\M_Concrete-Rectangular-Column.txt'
-FAMILY_CIR_TYPES_PATH = r'.\M_Concrete-Round-Column.txt'
+# FAMILY_REC_TYPES_PATH = r'.\M_Concrete-Rectangular-Column.txt'
+# FAMILY_CIR_TYPES_PATH = r'.\M_Concrete-Round-Column.txt'
+COLUMN_FAMILY_REC = 'Structural-Column_Rectangular_NA'
+COLUMN_FAMILY_CIR = 'Structural-Column_Round_NA'
+FAMILY_REC_TYPES_PATH = r'.\Structural-Column_Rectangular_NA.txt'
+FAMILY_CIR_TYPES_PATH = r'.\Structural-Column_Round_NA.txt'
+
 
 SETTINGS = {
     'shift_xdir':0,
@@ -22,8 +28,50 @@ SETTINGS = {
 OUTPUT = {'settings':SETTINGS, 'columns':[],'columns_circle':[], 'walls':[], 'walls_arc':[], 'walls_circle':[],'floors' : [], 'floors_circle' :[]}
 
 
+
+
+def get_columns_labels():
+    labels = []
+    for k,v in OUTPUT.items():
+        if k.startswith('columns'):
+            for column in v:
+                shape = column['shape'][-1]
+                labels.append(shape)
+    if len(labels) > 0:
+        return set(labels)
+
+
+def get_walls_labels():
+    labels = []
+    for k,v in OUTPUT.items():
+        if k.startswith('walls'):
+            for wall in v:
+                shape = wall['shape'][1]
+                labels.append(shape)
+    if len(labels) > 0:
+        return set(labels)
+
+
+
+def get_floors_labels():
+    labels = []
+    for k,v in OUTPUT.items():
+        if k.startswith('floors'):
+            for floor in v:
+                shape = floor['shape'][1]
+                labels.append(shape)
+    if len(labels) > 0:
+        return set(labels)
+
+
+
 def extract_all_current_types():
-    pass
+    result = {
+        'columns':get_columns_labels(),
+        'walls':get_walls_labels(),
+        'floors': get_floors_labels()
+    }
+    return result
 
 
 
