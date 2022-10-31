@@ -48,6 +48,9 @@ def export_rec_columns_family_types(columns, file_path = FAMILY_REC_TYPES_PATH):
     for column_label in columns:
         shapes.append(column_label['shape'][3])
     shapes = set(shapes)
+
+    if len(shapes) <=0 : return
+
     print(shapes)
     with open(file_path, 'w') as file:
         file.write(header)
@@ -88,6 +91,7 @@ def export_cir_columns_family_types(columns, file_path = FAMILY_CIR_TYPES_PATH):
     for column_label in columns:
         shapes.append(column_label['shape'][1])
     shapes = set(shapes)
+    if len(shapes) <=0 : return
     print(shapes)
     with open(file_path, 'w') as file:
         file.write(header)

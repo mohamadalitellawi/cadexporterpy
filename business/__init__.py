@@ -3,7 +3,7 @@ import helpers.common as mhelper
 import json
 
 
-TEMP_PATH = r'.\out.json'
+TEMP_PATH = r'.\revit_obj_output.json'
 
 COLUMN_FILE_PATH = r'.\column_output.json'
 WALL_FILE_PATH = r'.\wall_output.json'
@@ -22,7 +22,8 @@ SETTINGS = {
     'angle':0,
     'rounding_digits':-1,
     'wall_thk':200,
-    'floot_thk':200
+    'floot_thk':200,
+    'coordinates_rounding_digits':3
 }
 
 OUTPUT = {'settings':SETTINGS, 'columns':[],'columns_circle':[], 'walls':[], 'walls_arc':[], 'walls_circle':[],'floors' : [], 'floors_circle' :[]}

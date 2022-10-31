@@ -180,8 +180,8 @@ def get_open_wall_by_polyline(selected_polylines_coordinates, rounding=SETTINGS[
         mid_points = []
         for k,v in points.items():
             if v['near_point'] is not None:
-                x = round((k[0] + v['near_point'][0])/2 + SETTINGS['shift_xdir'], rounding)
-                y = round((k[1] + v['near_point'][1])/2 + SETTINGS['shift_ydir'], rounding)
+                x = round((k[0] + v['near_point'][0])/2 + SETTINGS['shift_xdir'], SETTINGS['coordinates_rounding_digits'])
+                y = round((k[1] + v['near_point'][1])/2 + SETTINGS['shift_ydir'], SETTINGS['coordinates_rounding_digits'])
                 mid_points.append((x,y))
         #print(mid_points, thickness)
         thickness = min(thicknessess)

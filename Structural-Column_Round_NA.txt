@@ -1,3 +1,9 @@
 ,b##LENGTH##MILLIMETERS,Structural Material##OTHER##
-HSC_1450_RC-50Mpa,1450,"Concrete, Cast-in-Place gray"
-HSC_400_RC-50Mpa,400,"Concrete, Cast-in-Place gray"
+HSC_1200_RC-50Mpa,1200,"Concrete, Cast-in-Place gray"
+HSC_500_RC-50Mpa,500,"Concrete, Cast-in-Place gray"
+HSC_800_RC-50Mpa,800,"Concrete, Cast-in-Place gray"
+HSC_700_RC-50Mpa,700,"Concrete, Cast-in-Place gray"
+HSC_1000_RC-50Mpa,1000,"Concrete, Cast-in-Place gray"
+HSC_600_RC-50Mpa,600,"Concrete, Cast-in-Place gray"
+HSC_1400_RC-50Mpa,1400,"Concrete, Cast-in-Place gray"
+HSC_1600_RC-50Mpa,1600,"Concrete, Cast-in-Place gray"
