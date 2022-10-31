@@ -2,12 +2,35 @@
   "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
   "IsCustomNode": false,
   "Description": "",
-  "Name": "Revit_StructuralColumns",
+  "Name": "player_COLUMN",
   "ElementResolver": {
     "ResolutionMap": {}
   },
-  "Inputs": [],
-  "Outputs": [],
+  "Inputs": [
+    {
+      "Id": "2f3b92558a7249cb936b2ea894c9384d",
+      "Name": "File Path",
+      "Type": "string",
+      "Value": "..\\revit_obj_output.json",
+      "Description": "Allows you to select a file on the system to get its filename"
+    }
+  ],
+  "Outputs": [
+    {
+      "Id": "d9582044a7ff44bbb54835aeeb0346de",
+      "Name": "StructuralFraming.ColumnByCurve",
+      "Type": "unknown",
+      "InitialValue": "",
+      "Description": "Create a column.\n\nStructuralFraming.ColumnByCurve (curve: Curve, level: Level, structuralColumnType: FamilyType): StructuralFraming"
+    },
+    {
+      "Id": "66320a3a3a594fa8b1e3591071884cf2",
+      "Name": "StructuralFraming.ColumnByCurve",
+      "Type": "unknown",
+      "InitialValue": "",
+      "Description": "Create a column.\n\nStructuralFraming.ColumnByCurve (curve: Curve, level: Level, structuralColumnType: FamilyType): StructuralFraming"
+    }
+  ],
   "Nodes": [
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
@@ -71,7 +94,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
       "HintPath": "C:\\Users\\mali\\Desktop\\_Py_Projects\\cadexporterpy\\revit_obj_output.json",
-      "InputValue": "..\\..\\revit_obj_output.json",
+      "InputValue": "..\\revit_obj_output.json",
       "NodeType": "ExtensionNode",
       "Id": "2f3b92558a7249cb936b2ea894c9384d",
       "Inputs": [],
@@ -397,8 +420,8 @@
     },
     {
       "ConcreteType": "DSRevitNodesUI.Levels, DSRevitNodesUI",
-      "SelectedIndex": 9,
-      "SelectedString": "GROUND FLR LEVEL",
+      "SelectedIndex": 0,
+      "SelectedString": "Level 1",
       "NodeType": "ExtensionNode",
       "Id": "9d9098528aa14c98ba824c862b0ebfdd",
       "Inputs": [],
@@ -486,8 +509,8 @@
     },
     {
       "ConcreteType": "DSRevitNodesUI.Levels, DSRevitNodesUI",
-      "SelectedIndex": 5,
-      "SelectedString": "FIRST FLR LEVEL",
+      "SelectedIndex": 1,
+      "SelectedString": "Level 2",
       "NodeType": "ExtensionNode",
       "Id": "74fc7658341e46a3bd6b18d813dcfe92",
       "Inputs": [],
@@ -868,11 +891,11 @@
         "ShowGeometry": true,
         "Name": "File Path",
         "Id": "2f3b92558a7249cb936b2ea894c9384d",
-        "IsSetAsInput": false,
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -9.2674249304350269,
-        "Y": 24.768696194425843
+        "X": -323.45911671760086,
+        "Y": 54.8508794506439
       },
       {
         "ShowGeometry": true,
@@ -929,7 +952,7 @@
         "Name": "StructuralFraming.ColumnByCurve",
         "Id": "d9582044a7ff44bbb54835aeeb0346de",
         "IsSetAsInput": false,
-        "IsSetAsOutput": false,
+        "IsSetAsOutput": true,
         "Excluded": false,
         "X": 2447.4718814878734,
         "Y": -861.30742206391085
@@ -938,11 +961,11 @@
         "ShowGeometry": true,
         "Name": "Levels",
         "Id": "9d9098528aa14c98ba824c862b0ebfdd",
-        "IsSetAsInput": false,
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 11.262202006996063,
-        "Y": -602.4977093031041
+        "X": -281.203468539568,
+        "Y": -577.4292232562558
       },
       {
         "ShowGeometry": true,
@@ -961,18 +984,18 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 2840.6903395503518,
-        "Y": 615.88976754021849
+        "X": 3080.2638393660586,
+        "Y": 406.11396670656472
       },
       {
         "ShowGeometry": true,
         "Name": "Levels",
         "Id": "74fc7658341e46a3bd6b18d813dcfe92",
-        "IsSetAsInput": false,
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -192.76241330141497,
-        "Y": -285.09956683100512
+        "X": -388.29660446683215,
+        "Y": -263.37354559040324
       },
       {
         "ShowGeometry": true,
@@ -1019,7 +1042,7 @@
         "Name": "StructuralFraming.ColumnByCurve",
         "Id": "66320a3a3a594fa8b1e3591071884cf2",
         "IsSetAsInput": false,
-        "IsSetAsOutput": false,
+        "IsSetAsOutput": true,
         "Excluded": false,
         "X": 2076.3528995606684,
         "Y": 847.47615413977383
@@ -1030,8 +1053,8 @@
         "Id": "a6776142604647939784e831eb863b00",
         "Title": "the level should be the lower",
         "Nodes": [],
-        "Left": 2063.9990420836593,
-        "Top": 218.99143843543337,
+        "Left": 2508.4230992180464,
+        "Top": -904.2295616853055,
         "Width": 0.0,
         "Height": 0.0,
         "FontSize": 36.0,
@@ -1041,8 +1064,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": 320.68794431556165,
-    "Y": 479.0574890642809,
-    "Zoom": 0.32938523762170346
+    "X": 315.37490701722868,
+    "Y": 484.27660770131467,
+    "Zoom": 0.24402577740248424
   }
 }
