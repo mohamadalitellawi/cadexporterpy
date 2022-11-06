@@ -49,21 +49,22 @@ def get_equivelant_rectangle(polyline2D,area,rounding = ROUNDING_3) :
         if i == 0:
             continue
         prev_pnt = polyline2D[i-1]
-        length  = get_distance_2d(pnt,prev_pnt,rounding)
+        length  = get_distance_2d(pnt,prev_pnt)
         if length <= max_length:
             continue
         # continue only if we found larger length
         max_length = length
-        if (pnt[0] - prev_pnt[0]) == 0:
-            slope = 90
+        if round(pnt[0] - prev_pnt[0],3) == 0:
+            angle_in_degrees = 90
         else:
             slope = (pnt[1] - prev_pnt[1])/(pnt[0] - prev_pnt[0])
+            angle_in_radians = math.atan(slope)
+            angle_in_degrees = math.degrees(angle_in_radians)
 
-        angle_in_radians = math.atan(slope)
-        angle_in_degrees = math.degrees(angle_in_radians)
         angle_in_degrees = round(angle_in_degrees,3)
         #print(angle_in_degrees)
         width = round(area / length, rounding)
+        length = round(length, rounding)
         #'HSC_400x300_RC-50Mpa'
         label = f'HSC_{int(length)}x{int(width)}_RC-50Mpa'
         result = (length, width, angle_in_degrees,label)

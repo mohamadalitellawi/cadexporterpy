@@ -1,0 +1,2 @@
+,b##LENGTH##MILLIMETERS,h##LENGTH##MILLIMETERS,Structural Material##OTHER##
+HSC_800x400_RC-50Mpa,400,800,"Concrete, Cast-in-Place gray"
