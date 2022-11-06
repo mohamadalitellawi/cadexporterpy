@@ -1,1 +1,0 @@
-,b##LENGTH##MILLIMETERS,Structural Material##OTHER##
