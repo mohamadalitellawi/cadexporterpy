@@ -1,0 +1,327 @@
+{
+  "Uuid": "77c0ee5e-f28a-4ff1-8dd2-6f520995ad57",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "221106_columns",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "d4c30a69ba3e4ec7a655b8679b1c6b13",
+      "Name": "File Path",
+      "Type": "string",
+      "Value": "C:\\Users\\mali\\Desktop\\_Py_Projects\\cadexporterpy\\sample_data\\revit_obj_output.json",
+      "Description": "Allows you to select a file on the system to get its filename"
+    }
+  ],
+  "Outputs": [
+    {
+      "Id": "9e3aac76b8b54454952340689165d3dc",
+      "Name": "Python Script",
+      "Type": "unknown",
+      "InitialValue": "",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "Id": "d3b6dcac14f8494ba7ba8f6e75eccd96",
+      "Name": "Python Script",
+      "Type": "unknown",
+      "InitialValue": "",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries  \r\nimport sys  \r\nimport clr\r\nimport json\r\nclr.AddReference('ProtoGeometry')  \r\nfrom Autodesk.DesignScript.Geometry import *  \r\nclr.AddReference('RevitNodes')  \r\nimport Revit  \r\nclr.ImportExtensions(Revit.Elements)  \r\nclr.ImportExtensions(Revit.GeometryConversion) \r\nclr.AddReference('DSCoreNodes')  \r\nimport DSCore \r\nclr.AddReference('Tessellation')  \r\nimport Tessellation \r\nclr.AddReference('DSOffice')  \r\nimport DSOffice \r\n\r\n\r\n# The inputs to this node will be stored as a list in the IN variables.  \r\ndataEnteringNode = IN  \r\njson_data = json.loads(IN[0])\r\n\r\n# Place your code below this line  \r\ndef get_columns_labels(json_data):\r\n    labels = []\r\n    for k,v in json_data.items():\r\n        if k.startswith('columns'):\r\n            for column in v:\r\n                shape = column['shape'][-1]\r\n                labels.append(shape)\r\n    if len(labels) > 0:\r\n        return set(labels)\r\n\r\ndef get_circular_columns_labels(json_data):\r\n    labels = []\r\n    for k,v in json_data.items():\r\n        if k.startswith('columns_circle'):\r\n            for column in v:\r\n                shape = column['shape'][-1]\r\n                labels.append(shape)\r\n    if len(labels) > 0:\r\n        return set(labels)\r\n\r\ndef get_walls_labels(json_data):\r\n    labels = []\r\n    for k,v in json_data.items():\r\n        if k.startswith('walls'):\r\n            for wall in v:\r\n                shape = wall['shape'][1]\r\n                labels.append(shape)\r\n    if len(labels) > 0:\r\n        return set(labels)\r\n\r\n\r\n\r\ndef get_floors_labels(json_data):\r\n    labels = []\r\n    for k,v in json_data.items():\r\n        if k.startswith('floors'):\r\n            for floor in v:\r\n                shape = floor['shape'][1]\r\n                labels.append(shape)\r\n    if len(labels) > 0:\r\n        return set(labels)\r\n\r\ntry:  \r\n\terrorReport = None  \r\n\tcolumns_labels = get_columns_labels(json_data)\r\n\tcircular_columns_labels = get_circular_columns_labels(json_data)\r\n\trectangular_columns_labels = columns_labels-circular_columns_labels\r\n\twalls_labels = get_walls_labels(json_data)\r\n\tfloors_labels = get_floors_labels(json_data)\r\nexcept:  \r\n    import traceback  \r\n    errorReport = traceback.format_exc()  \r\n# Assign your output to the OUT variable.  \r\nif errorReport is None:  \r\n    #OUT = columns_labels,walls_labels,floors_labels\r\n    OUT = rectangular_columns_labels,circular_columns_labels,walls_labels,floors_labels\r\nelse:  \r\n    OUT = errorReport",
+      "VariableInputPorts": true,
+      "Id": "9e3aac76b8b54454952340689165d3dc",
+      "Inputs": [
+        {
+          "Id": "9121196217ab403ea55b1e2d2ae6f1e7",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "82d01016cbf34ffab867d9b674bdb08e",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.IO.FileSystem.ReadText@var",
+      "Id": "c69aacc8983e456ba57434bd324073d7",
+      "Inputs": [
+        {
+          "Id": "42c5e6765a104290acbd850def7defb8",
+          "Name": "file",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c96c64fc18b342dca66b8df23a872bfa",
+          "Name": "str",
+          "Description": "Contents of the text file.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Reads a text file and returns the contents as a string.\n\nFileSystem.ReadText (file: var): string"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
+      "HintPath": "C:\\Users\\mali\\Desktop\\_Py_Projects\\cadexporterpy\\sample_data\\revit_obj_output.json",
+      "InputValue": "C:\\Users\\mali\\Desktop\\_Py_Projects\\cadexporterpy\\sample_data\\revit_obj_output.json",
+      "NodeType": "ExtensionNode",
+      "Id": "d4c30a69ba3e4ec7a655b8679b1c6b13",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "215d8d5269284c478f62da41036043f2",
+          "Name": "",
+          "Description": "Filename",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows you to select a file on the system to get its filename"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries  \r\nimport sys  \r\nimport clr\r\nimport json\r\nclr.AddReference('ProtoGeometry')  \r\nfrom Autodesk.DesignScript.Geometry import *  \r\nclr.AddReference('RevitNodes')  \r\nimport Revit  \r\nclr.ImportExtensions(Revit.Elements)  \r\nclr.ImportExtensions(Revit.GeometryConversion) \r\nclr.AddReference('DSCoreNodes')  \r\nimport DSCore \r\nclr.AddReference('Tessellation')  \r\nimport Tessellation \r\nclr.AddReference('DSOffice')  \r\nimport DSOffice \r\n\r\nimport System \r\nfrom System import Array \r\nfrom System.Collections.Generic import * \r\n# The inputs to this node will be stored as a list in the IN variables.  \r\ndataEnteringNode = IN  \r\njson_data = json.loads(IN[0])\r\nstart_level = IN[1]\r\nend_level = IN[2]\r\n# Place your code below this line  \r\n\r\nstart_elevation = start_level.Elevation\r\nend_elevation = end_level.Elevation\r\ncol_height = round(end_elevation - start_elevation,3)\r\n\r\nresult = []\r\n\r\ntry:  \r\n\terrorReport = None  \r\n\tfor col in json_data['columns']:\r\n\t\tx,y = col['center']\r\n\t\tlabel = col['shape'][-1]\r\n\t\tangle = -1 * float(col['shape'][-2]) + 90\r\n\t\tpt1 = Point.ByCoordinates(x,y,start_elevation)\r\n\t\tpt2 = Point.ByCoordinates(x,y,end_elevation)\r\n\t\tline = Line.ByStartPointEndPoint(pt1,pt2)\r\n\t\t\r\n\t\ttype = Revit.Elements.FamilyType.ByName(label)\r\n\t\tstruc_column = Revit.Elements.StructuralFraming.ColumnByCurve(line,start_level,type)\r\n\t\t\r\n\t\tangle_parameter = Revit.Elements.Parameter.ParameterByName(struc_column,'Cross-Section Rotation')\r\n\t\t_ = Revit.Elements.Parameter.SetValue(angle_parameter,angle)\r\n\t\tresult.append(struc_column)\r\n\r\n\tfor col in json_data['columns_circle']:\r\n\t\tx,y = col['center']\r\n\t\tlabel = col['shape'][-1]\r\n\t\t\r\n\t\tpt1 = Point.ByCoordinates(x,y,start_elevation)\r\n\t\tpt2 = Point.ByCoordinates(x,y,end_elevation)\r\n\t\tline = Line.ByStartPointEndPoint(pt1,pt2)\r\n\t\t\r\n\t\ttype = Revit.Elements.FamilyType.ByName(label)\r\n\t\tstruc_column = Revit.Elements.StructuralFraming.ColumnByCurve(line,start_level,type)\r\n\t\t\r\n\t\tresult.append(struc_column)\r\n\t\t\r\n\tfor wall in json_data['walls']:\r\n\t\tlabel = wall['shape'][1]\r\n\t\tcurve_points = []\r\n\t\tfor pnt in wall['coordinates']:\r\n\t\t\tx,y = pnt\r\n\t\t\tcurve_points.append(Point.ByCoordinates(x,y,0))\r\n\t\tif len(curve_points) < 1:\r\n\t\t\tcontinue\r\n\t\tpoly_curve = PolyCurve.ByPoints(curve_points)\r\n\t\tcurves = PolyCurve.Curves(poly_curve)\r\n\t\tif len(curves)<1:\r\n\t\t\tcontinue\r\n\t\ttype = Revit.Elements.WallType.ByName(label)\r\n\t\tfor curve in curves:\r\n\t\t\tstruc_wall = Revit.Elements.Wall.ByCurveAndLevels(curve,start_level,end_level,type)\r\n\t\t\tstructural_parameter = Revit.Elements.Parameter.ParameterByName(struc_wall,'Structural')\r\n\t\t\t_ = Revit.Elements.Parameter.SetValue(structural_parameter,1)\r\n\t\t\ttop_constraint_parameter = Revit.Elements.Parameter.ParameterByName(struc_wall,'Top Constraint')\r\n\t\t\t_ = Revit.Elements.Parameter.SetValue(top_constraint_parameter,end_level)\r\n\t\t\tresult.append(struc_wall)\r\n\t\t\t\r\n\tfor wall in json_data['walls_arc']:\r\n\t\tlabel = wall['shape'][1]\r\n\t\tcenter_pnt = wall['coordinates'][0]\r\n\t\tstart_pnt = wall['coordinates'][1]\r\n\t\tend_pnt = wall['coordinates'][2]\r\n\t\ttype = Revit.Elements.WallType.ByName(label)\r\n\t\tz = 0\r\n\t\tcurve = Arc.ByCenterPointStartPointEndPoint(Point.ByCoordinates(center_pnt[0],center_pnt[1],z),Point.ByCoordinates(start_pnt[0],start_pnt[1],z),Point.ByCoordinates(end_pnt[0],end_pnt[1],z))\r\n\r\n\t\tstruc_wall = Revit.Elements.Wall.ByCurveAndLevels(curve,start_level,end_level,type)\r\n\t\tstructural_parameter = Revit.Elements.Parameter.ParameterByName(struc_wall,'Structural')\r\n\t\t_ = Revit.Elements.Parameter.SetValue(structural_parameter,1)\r\n\t\ttop_constraint_parameter = Revit.Elements.Parameter.ParameterByName(struc_wall,'Top Constraint')\r\n\t\t_ = Revit.Elements.Parameter.SetValue(top_constraint_parameter,end_level)\r\n\t\tresult.append(struc_wall)\r\n\t\t\r\n\r\n\tfor floor in json_data['floors']:\r\n\t\tlabel = floor['shape'][1]\r\n\t\tcurve_points = []\r\n\t\tfor pnt in floor['coordinates']:\r\n\t\t\tx,y = pnt\r\n\t\t\tcurve_points.append(Point.ByCoordinates(x,y,end_elevation))\r\n\t\tif len(curve_points) < 1:\r\n\t\t\tcontinue\r\n\t\tpoly_curve = PolyCurve.ByPoints(curve_points, True)\r\n\r\n\t\ttype = Revit.Elements.FloorType.ByName(label)\r\n\r\n\t\tstruc_floor = Revit.Elements.Floor.ByOutlineTypeAndLevel(poly_curve,type, end_level)\r\n\t\t\r\n\t\tstructural_parameter = Revit.Elements.Parameter.ParameterByName(struc_floor,'Structural')\r\n\t\t_ = Revit.Elements.Parameter.SetValue(structural_parameter,1)\r\n\t\tresult.append(struc_floor)\r\n\t\t\r\n\r\n\r\nexcept:  \r\n    import traceback  \r\n    errorReport = traceback.format_exc()  \r\n# Assign your output to the OUT variable.  \r\nif errorReport is None:  \r\n    OUT = result\r\nelse:  \r\n    OUT = errorReport",
+      "VariableInputPorts": true,
+      "Id": "d3b6dcac14f8494ba7ba8f6e75eccd96",
+      "Inputs": [
+        {
+          "Id": "06b32b82dee14ae0a93e1a2667a2d79d",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5a1592ba85b943a0831c3fc2482bcea5",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "81f1a6b7072a4128b4dba60bfe0718a8",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f592c0f6cace401e9db26490cd08fd89",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Levels, DSRevitNodesUI",
+      "SelectedIndex": 0,
+      "SelectedString": "Level 1",
+      "NodeType": "ExtensionNode",
+      "Id": "147d668b4f5c48b19c2067e9cf073bfd",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "c8847db69cb14181b05d4a38466b41fb",
+          "Name": "Levels",
+          "Description": "The selected Levels",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Select a level in the active document"
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Levels, DSRevitNodesUI",
+      "SelectedIndex": 1,
+      "SelectedString": "Level 2",
+      "NodeType": "ExtensionNode",
+      "Id": "0350f39db3dd45c3bd6e8fb6c56b07f0",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5c1c149ec9d64c17bf25d3a883765925",
+          "Name": "Levels",
+          "Description": "The selected Levels",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Select a level in the active document"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "c96c64fc18b342dca66b8df23a872bfa",
+      "End": "9121196217ab403ea55b1e2d2ae6f1e7",
+      "Id": "89ab45bda3604c1891373c5da7d67ef2"
+    },
+    {
+      "Start": "c96c64fc18b342dca66b8df23a872bfa",
+      "End": "06b32b82dee14ae0a93e1a2667a2d79d",
+      "Id": "eb52b45131e24ae08189b441b79f2a82"
+    },
+    {
+      "Start": "215d8d5269284c478f62da41036043f2",
+      "End": "42c5e6765a104290acbd850def7defb8",
+      "Id": "ef07209c0300478781440c595835725a"
+    },
+    {
+      "Start": "c8847db69cb14181b05d4a38466b41fb",
+      "End": "5a1592ba85b943a0831c3fc2482bcea5",
+      "Id": "8a271ad491ec4d5bb2f3a2994e6cd371"
+    },
+    {
+      "Start": "5c1c149ec9d64c17bf25d3a883765925",
+      "End": "81f1a6b7072a4128b4dba60bfe0718a8",
+      "Id": "59918ca6ebf64e088eb12f88fa52176c"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 100.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.3.2.15696",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": 490.58192806809984,
+      "EyeY": 17618.795097810544,
+      "EyeZ": 14808.123611293437,
+      "LookX": 6519.6845584192861,
+      "LookY": -16053.444506501906,
+      "LookZ": -13255.956704760489,
+      "UpX": 0.25314186035949965,
+      "UpY": 0.81915204428899224,
+      "UpZ": -0.5146932356956897
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "9e3aac76b8b54454952340689165d3dc",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": true,
+        "Excluded": false,
+        "X": 846.67686645363381,
+        "Y": -82.058669963377582
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "FileSystem.ReadText",
+        "Id": "c69aacc8983e456ba57434bd324073d7",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 333.87017395466205,
+        "Y": -34.879822727656034
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "File Path",
+        "Id": "d4c30a69ba3e4ec7a655b8679b1c6b13",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -87.418398814823377,
+        "Y": -11.722465952337217
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "d3b6dcac14f8494ba7ba8f6e75eccd96",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": true,
+        "Excluded": false,
+        "X": 711.68394018433082,
+        "Y": 339.72492189232014
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Levels",
+        "Id": "147d668b4f5c48b19c2067e9cf073bfd",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -49.219286789759281,
+        "Y": 163.34979768937481
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Levels",
+        "Id": "0350f39db3dd45c3bd6e8fb6c56b07f0",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -55.047185065844133,
+        "Y": 284.5700818319367
+      }
+    ],
+    "Annotations": [],
+    "X": 277.03718401648257,
+    "Y": 212.42540221655679,
+    "Zoom": 0.77997097939582383
+  }
+}
